@@ -127,10 +127,9 @@ async function showApp(){
  await loadJobs();
  const inviteToken=new URLSearchParams(location.search).get('invite');
  if(inviteToken && !sessionStorage.getItem('wp_invite_'+inviteToken)){
-  sessionStorage.setItem('wp_invite_'+inviteToken,'attempted');
   const {data,error}=await supabase.rpc('accept_job_invitation',{p_token:inviteToken});
   if(error)showMessage('globalMessage',friendlyError(error),'error');
-  else {showMessage('globalMessage','Invitation accepted. The Job Passport is now available in your workspace.','ok');history.replaceState({},'',location.pathname);await loadJobs();openJob(data);}
+  else {sessionStorage.setItem('wp_invite_'+inviteToken,'accepted');showMessage('globalMessage','Invitation accepted. The Job Passport is now available in your workspace.','ok');history.replaceState({},'',location.pathname);await loadJobs();openJob(data);}
  }
 }
 async function loadJobs(){
@@ -169,7 +168,7 @@ async function openJob(id){
  (timeline.length?'<div class="timeline">'+timeline.map(t=>'<div class="event"><strong>'+escapeHtml(t.title)+'</strong><p>'+escapeHtml(t.body)+'</p><time>'+fmtDateTime(t.at)+' · '+escapeHtml(t.by)+'</time></div>').join('')+'</div>':'<div class="empty">No progress notes yet. The job creation is recorded in the job record.</div>')+
  '<hr class="rule"><h2>Quote approvals</h2>'+
  (approvals.length?approvals.map(a=>'<div style="border:1px solid var(--line);padding:12px;border-radius:10px;margin:8px 0"><div class="between"><strong>'+escapeHtml(a.approval_type.replaceAll('_',' '))+'</strong>'+statusBadge(a.status)+'</div><p>'+escapeHtml(a.summary)+'</p><p class="small muted">Approver: '+escapeHtml(a.approver_email)+'</p>'+(a.status==='pending'&&a.approver_email.toLowerCase()===currentUser.email.toLowerCase()?'<div class="row"><button class="btn" data-approval="'+a.id+'" data-decision="approved">Approve</button><button class="btn secondary" data-approval="'+a.id+'" data-decision="declined">Decline</button><button class="btn secondary" data-approval="'+a.id+'" data-decision="question">Ask a question</button></div>':'')+(a.decision_note?'<p class="small muted">Response: '+escapeHtml(a.decision_note)+'</p>':'')+'</div>').join(''):'<p class="muted small">No approval requests yet.</p>')+
- (isOwner?'<div class="field"><label for="approvalEmail">Request quote approval from email</label><input id="approvalEmail" type="email" maxlength="254" placeholder="customer@example.com"></div><div class="field"><label for="approvalSummary">What is being approved?</label><textarea id="approvalSummary" maxlength="3000" placeholder="Scope and quote details for the customer to review"></textarea></div><button class="btn secondary" id="sendApproval">Request approval</button>':'')+
+ (isOwner?'<div class="field"><label for="approvalEmail">Request approval from email</label><input id="approvalEmail" type="email" maxlength="254" placeholder="customer@example.com"></div><div class="field"><label for="approvalType">Approval type</label><select id="approvalType"><option value="quote">Quote / price</option><option value="scope">Scope</option><option value="change_order">Change order</option><option value="completion">Completion</option></select></div><div class="field"><label for="approvalSummary">What is being approved?</label><textarea id="approvalSummary" maxlength="3000" placeholder="Write the exact scope, price, change or completion details to review"></textarea></div><button class="btn secondary" id="sendApproval">Request approval</button>':'')+
  '<hr class="rule"><h2>Change requests</h2>'+
  (changes.length?changes.map(c=>'<div style="border:1px solid var(--line);padding:11px;border-radius:10px;margin:8px 0"><div class="between"><strong>'+escapeHtml(c.description)+'</strong>'+statusBadge(c.status)+'</div><p class="small muted">Price change: '+Number(c.amount_delta).toLocaleString()+' · Schedule change: '+Number(c.days_delta)+' day(s)</p></div>').join(''):'<p class="muted small">No change requests yet.</p>')+
  '<form id="changeForm"><div class="field"><label for="changeDescription">Propose or request a change</label><textarea id="changeDescription" required maxlength="3000" placeholder="Describe the change clearly"></textarea></div><div class="formgrid"><div class="field"><label for="changeAmount">Price difference (ZAR)</label><input id="changeAmount" type="number" step=".01" min="-100000000" max="100000000" value="0"></div><div class="field"><label for="changeDays">Schedule difference (days)</label><input id="changeDays" type="number" min="-365" max="365" value="0"></div></div><button class="btn secondary" type="submit">Save change request</button></form>'+
@@ -221,11 +220,11 @@ async function createInvite(e){
 async function sendApproval(){
  if(!currentJob)return;const approver_email=$('approvalEmail').value.trim().toLowerCase(),summary=$('approvalSummary').value.trim();
  if(!approver_email||summary.length<5){showMessage('globalMessage','Enter the approver email and a clear summary.','error');return;}
- const {error}=await supabase.from('job_approvals').insert({job_id:currentJob.id,requested_by:currentUser.id,approver_email,approval_type:'quote',summary});
+ const approval_type=$('approvalType').value;const {error}=await supabase.from('job_approvals').insert({job_id:currentJob.id,requested_by:currentUser.id,approver_email,approval_type,summary});
  if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
  const {error:jobError}=await supabase.from('jobs').update({status:'awaiting_approval'}).eq('id',currentJob.id);
  if(jobError){showMessage('globalMessage','Approval created but job status could not be updated: '+friendlyError(jobError),'error');}
- else showMessage('globalMessage','Quote approval request saved. Invite the approver to this Job Passport so they can review it.','ok');
+ else showMessage('globalMessage','Approval request saved. Invite the approver to this Job Passport so they can review it.','ok');
  await loadJobs();await openJob(currentJob.id);
 }
 async function respondApproval(id,decision){
