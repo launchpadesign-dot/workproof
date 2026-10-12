@@ -379,3 +379,36 @@ Use aggregated metrics where possible. Do not use complaint volume alone to auto
 ## 13. Current implementation status
 
 The repository currently contains a static landing page (index.html). This document is a product specification, not proof that authentication, a database, file uploads, email notifications, payments, admin tools or production security have been implemented. Those require a backend, database policies, integration configuration and testing before real customer data is accepted.
+
+
+## 12. Implementation status — 12 October 2026
+
+The following pieces have been implemented in the connected WorkProof Supabase project and repository. They are a **beta foundation**, not a claim that the whole platform is production-ready.
+
+### Implemented in the database
+- Auth-created profile bootstrap trigger.
+- Job participant memberships with row-level security.
+- Hashed, single-use invitation tokens with a seven-day expiry; the invited user must sign in using the invited email.
+- Participant read access for their jobs, timeline entries, approvals, change requests and evidence metadata.
+- Participant-submitted timeline updates, change requests and concerns.
+- Explicit quote approval responses, including an append-only decision record and activity event.
+- Append-only triggers for core job updates and activity events.
+- Private platform-admin roster, moderation audit table, concern review RPCs and admin status checks.
+- Database-enforced account suspension status in RLS, alongside a Supabase Auth ban.
+- Indexes for core participant, timeline and moderation lookups.
+
+### Implemented in the repository
+- `workspace.html`: Supabase sign-in/sign-up, job creation, job list/detail, timeline updates, invite-link creation/redeeming, quote approvals, change requests and concerns.
+- `admin.html`: gated account management, reversible suspension/restoration, concern review, and audit-log viewer.
+- `supabase/functions/workproof-admin/index.ts`: server-side Auth administration. JWT verification is enabled; the function checks the private admin roster before listing accounts or changing account access.
+- `app.html` remains a fictional-data prototype and must not be confused with the live-data workspace.
+
+### Beta limitations / next work
+- No end-to-end browser test has yet been completed using separate real owner and customer accounts.
+- Email invitation delivery is not configured; the owner must copy the generated single-use link and send it privately.
+- Private photo upload/storage is not enabled. The workspace intentionally tells users not to upload sensitive files.
+- The platform owner has not yet been provisioned in `public.platform_admins`; do not grant admin access based on a profile role or email claim. Provision only after confirming the exact WorkProof account.
+- Admins can suspend and restore accounts, not permanently delete them. Account deletion requires a separate, privacy-aware workflow.
+- A Vercel 403 prevented deployment inspection; do not claim the latest commit is live until the Vercel project access/deployment is verified.
+- Supabase security advisor still flags intentional security-definer RPCs and tables with no client policies. These endpoints have explicit authorization checks and restrictive grants, but the warnings must be reviewed before public launch.
+- Complete POPIA and Consumer Protection Act review, admin MFA, appeals, privacy requests, backups, monitoring and cross-account security tests before public launch.
