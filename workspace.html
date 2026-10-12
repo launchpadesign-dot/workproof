@@ -127,8 +127,9 @@ async function showApp(){
  await loadJobs();
  const inviteToken=new URLSearchParams(location.search).get('invite');
  if(inviteToken && !sessionStorage.getItem('wp_invite_'+inviteToken)){
+  sessionStorage.setItem('wp_invite_'+inviteToken,'processing');
   const {data,error}=await supabase.rpc('accept_job_invitation',{p_token:inviteToken});
-  if(error)showMessage('globalMessage',friendlyError(error),'error');
+  if(error){sessionStorage.removeItem('wp_invite_'+inviteToken);showMessage('globalMessage',friendlyError(error),'error');}
   else {sessionStorage.setItem('wp_invite_'+inviteToken,'accepted');showMessage('globalMessage','Invitation accepted. The Job Passport is now available in your workspace.','ok');history.replaceState({},'',location.pathname);await loadJobs();openJob(data);}
  }
 }
