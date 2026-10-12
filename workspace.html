@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102235">
+<meta name="description" content="WorkProof workspace: manage jobs, approvals and a shared Job Passport.">
+<title>WorkProof Workspace</title>
+<style>
+:root{--navy:#102235;--navy2:#1b3a4d;--teal:#0f9f8f;--mint:#d9f6eb;--paper:#f5f8f7;--ink:#1b3040;--muted:#617484;--line:#dce7e3;--white:#fff;--red:#a93434;--amber:#956312}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #55cbbd;outline-offset:2px}a{color:inherit}.top{background:var(--navy);color:white;border-bottom:3px solid var(--teal)}.topin{max-width:1180px;margin:auto;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-size:22px;font-weight:850;letter-spacing:-.8px}.brand span{color:#59d5c3}.topnote{font-size:12px;color:#d5e7e4}.layout{max-width:1180px;margin:auto;padding:24px 20px 60px}.notice{padding:12px 14px;border:1px solid #b7e5d7;background:#eaf8f2;border-radius:12px;margin-bottom:20px;font-size:13px}.authbox,.panel,.stat{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 22px #10223508}.authbox{max-width:470px;margin:38px auto;padding:25px}.authbox h1{margin:0 0 5px;font-size:28px;letter-spacing:-.8px}.muted{color:var(--muted)}.small{font-size:12px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:13px;font-weight:750}.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid #cad9d4;border-radius:10px;background:white;color:var(--ink)}textarea{resize:vertical;min-height:95px}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:750;background:var(--teal);color:white}.btn:hover{filter:brightness(.95)}.btn.secondary{background:#edf5f2;color:var(--navy);border:1px solid var(--line)}.btn.dark{background:var(--navy)}.btn.danger{background:#fff0ef;color:var(--red);border:1px solid #f0ceca}.btn:disabled{opacity:.55;cursor:not-allowed}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0}.tab{background:white;border:1px solid var(--line);padding:9px 13px;border-radius:10px;font-weight:750;color:var(--muted)}.tab.active{background:var(--navy);color:white;border-color:var(--navy)}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}.stat{padding:17px}.stat strong{display:block;font-size:27px;letter-spacing:-1px}.stat span{font-size:12px;color:var(--muted)}.cols{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);gap:16px;align-items:start}.panel{padding:19px;margin-bottom:15px}.panel h2{font-size:18px;margin:0 0 12px}.joblist{display:grid;gap:9px}.job{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:white}.job:hover{border-color:#80cfc2}.jobtitle{font-weight:800}.badge{display:inline-block;border-radius:99px;padding:3px 8px;font-size:11px;font-weight:800;background:#edf4f1;color:#425b67}.badge.open{background:#fff4da;color:#845b11}.badge.completed{background:#e3f8ed;color:#176a4d}.timeline{border-left:2px solid #d5e8e2;margin:14px 0 5px 7px;padding-left:19px;display:grid;gap:16px}.event{position:relative}.event:before{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--teal);left:-25px;top:6px;border:3px solid white;box-shadow:0 0 0 1px #9bcfc5}.event p{margin:3px 0}.event time{font-size:11px;color:var(--muted)}.empty{padding:26px 16px;text-align:center;color:var(--muted);border:1px dashed #c9d9d4;border-radius:12px}.rule{border:0;border-top:1px solid var(--line);margin:18px 0}.hidden{display:none!important}.status{font-size:13px;padding:10px 12px;border-radius:10px;margin:12px 0}.status.error{background:#fff0ef;color:var(--red)}.status.ok{background:#e9f8f0;color:#176a4d}.status.info{background:#edf5fa;color:#28536a}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.formgrid .wide{grid-column:1/-1}.pill{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}.footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:760px){.cols{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{padding:12px}.stat strong{font-size:22px}.layout{padding:16px 12px 40px}.topin{padding:13px}.authbox{margin:20px auto;padding:19px}.job{align-items:flex-start}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin"><a class="brand" href="./index.html" style="text-decoration:none">Work<span>Proof</span></a><div class="topnote">Clear work. Clear records.</div></div></header>
+<main class="layout">
+<div class="notice"><strong>Private beta workspace.</strong> Use real accounts only for testing with information you are comfortable storing. WorkProof records events and decisions but does not decide who is right or guarantee a legal outcome. Do not upload sensitive documents yet.</div>
+<section id="authView" class="authbox">
+<h1 id="authHeading">Welcome back</h1><p class="muted" id="authIntro">Sign in to see your jobs and Job Passports.</p>
+<div id="authMessage" aria-live="polite"></div>
+<form id="authForm">
+<div class="field" id="nameField" hidden><label for="fullName">Your name</label><input id="fullName" maxlength="120" autocomplete="name"></div>
+<div class="field" id="companyField" hidden><label for="companyName">Business name (optional)</label><input id="companyName" maxlength="160" autocomplete="organization"></div>
+<div class="field"><label for="email">Email</label><input id="email" type="email" required maxlength="254" autocomplete="email"></div>
+<div class="field"><label for="password">Password</label><input id="password" type="password" required minlength="8" autocomplete="current-password"></div>
+<div class="field" id="roleField" hidden><label for="role">I mainly use WorkProof as a…</label><select id="role"><option value="worker">Business owner / worker</option><option value="customer">Customer</option><option value="both">Both</option></select></div>
+<button id="authSubmit" class="btn" style="width:100%" type="submit">Sign in</button>
+</form>
+<div class="row" style="margin-top:13px"><button id="toggleAuth" class="btn secondary" type="button">Create an account</button><button id="forgotPassword" class="btn secondary" type="button">Reset password</button></div>
+<p class="small muted">New accounts may need to confirm their email before signing in.</p>
+</section>
+<section id="appView" class="hidden">
+<div class="between"><div><p class="small muted" style="margin:0">YOUR WORKSPACE</p><h1 id="welcomeTitle" style="margin:0;font-size:30px;letter-spacing:-1px">Your Job Passports</h1><div id="userLabel" class="muted small"></div></div><button id="signOut" class="btn secondary" type="button">Sign out</button></div>
+<div class="stats"><div class="stat"><strong id="statTotal">0</strong><span>Jobs you can access</span></div><div class="stat"><strong id="statActive">0</strong><span>Active / awaiting</span></div><div class="stat"><strong id="statConcerns">0</strong><span>Open concerns</span></div></div>
+<div class="tabs"><button class="tab active" data-tab="jobsTab">My jobs</button><button class="tab" data-tab="createTab">Create a job</button><button class="tab" data-tab="helpTab">Help & privacy</button></div>
+<div id="globalMessage" aria-live="polite"></div>
+<div id="jobsTab" class="tabpane">
+<div class="cols"><section class="panel"><div class="between"><h2>Your Job Passports</h2><button class="btn" id="newJobBtn" type="button">+ New job</button></div><div id="jobList" class="joblist"><div class="empty">Loading your jobs…</div></div></section>
+<section id="jobDetail" class="panel"><div class="empty">Choose a job to open its Job Passport.</div></section></div>
+</div>
+<div id="createTab" class="tabpane hidden"><section class="panel"><h2>Create a job record</h2><p class="muted small">Start with the scope, customer and quote. The first record will be saved to the database and linked to your account.</p>
+<form id="createJobForm"><div class="formgrid">
+<div class="field"><label for="jobTitle">Job title *</label><input id="jobTitle" required maxlength="160" placeholder="e.g. Repair leaking kitchen tap"></div>
+<div class="field"><label for="customerName">Customer name *</label><input id="customerName" required maxlength="160" placeholder="Customer's name"></div>
+<div class="field"><label for="customerEmail">Customer email (for invite)</label><input id="customerEmail" type="email" maxlength="254" placeholder="customer@example.com"></div>
+<div class="field"><label for="quoteAmount">Quote amount (ZAR)</label><input id="quoteAmount" type="number" min="0" max="100000000" step="0.01" placeholder="0.00"></div>
+<div class="field"><label for="startDate">Planned start</label><input id="startDate" type="date"></div>
+<div class="field"><label for="dueDate">Target completion</label><input id="dueDate" type="date"></div>
+<div class="field wide"><label for="scope">Agreed / proposed scope *</label><textarea id="scope" required maxlength="10000" placeholder="What work is included? Mention exclusions or assumptions."></textarea></div>
+<div class="field wide"><label for="firstNote">Initial note (optional)</label><textarea id="firstNote" maxlength="3000" placeholder="Any context both sides should understand."></textarea></div>
+</div><button class="btn" type="submit">Save Job Passport</button></form></section></div>
+<div id="helpTab" class="tabpane hidden"><section class="panel"><h2>How WorkProof works</h2><p>A Job Passport keeps job details, progress notes, invitations, concerns and decisions in one chronological record. Approved terms should not be silently overwritten.</p><ul><li>Only the job owner and invited participants can access a job.</li><li>Invitations are single-use and expire after seven days. Share invite links privately with the intended person.</li><li>Progress notes and activity events are designed to be append-only. If something is wrong, add a correction note rather than silently rewriting history.</li><li>Do not upload sensitive identity documents, bank details or other highly sensitive information. Secure photo uploads are not enabled in this beta.</li><li>For privacy or account deletion requests, contact the WorkProof team through the public website while support processes are being built.</li></ul><p class="small muted">WorkProof is a record-keeping tool, not legal advice, a payment guarantee or a decision-maker in disputes.</p></section></div>
+</section>
+<div class="footer">WorkProof beta · Private by default · Built for fair, clear job records</div>
+</main>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/+esm';
+
+const SUPABASE_URL = 'https://jerovakpjfcvhxsdethg.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_QC8dUSmK4aTUkPek18wpdQ_uM4A-bxi';
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const $ = (id) => document.getElementById(id);
+let currentUser = null, jobs = [], currentJob = null, signUpMode = false;
+
+function escapeHtml(value='') { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function showMessage(target, message, type='info') { const el=$(target); el.innerHTML = message ? '<div class="status '+type+'">'+escapeHtml(message)+'</div>' : ''; }
+function friendlyError(error) {
+ const message = error?.message || 'Something went wrong. Please try again.';
+ if (/invalid login credentials/i.test(message)) return 'Email or password not recognised.';
+ if (/email not confirmed/i.test(message)) return 'Please confirm your email using the link we sent you.';
+ if (/row-level security|permission denied/i.test(message)) return 'Your account does not have permission for that action. Refresh and check that you joined the correct job.';
+ return message;
+}
+function fmtDate(value) { if(!value) return 'Not set'; return new Date(value).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
+function fmtDateTime(value) { return new Date(value).toLocaleString(undefined,{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function statusBadge(status='draft') {
+ const label = String(status).replaceAll('_',' ');
+ return '<span class="badge '+(status==='completed'?'completed':(['awaiting_approval','review','disputed'].includes(status)?'open':''))+'">'+escapeHtml(label)+'</span>';
+}
+function setTab(id) {
+ document.querySelectorAll('.tabpane').forEach(el=>el.classList.toggle('hidden',el.id!==id));
+ document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===id));
+}
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>setTab(btn.dataset.tab)));
+$('newJobBtn').addEventListener('click',()=>setTab('createTab'));
+$('toggleAuth').addEventListener('click',()=>{
+ signUpMode=!signUpMode;
+ $('authHeading').textContent=signUpMode?'Create your WorkProof account':'Welcome back';
+ $('authIntro').textContent=signUpMode?'Create an account to start or join a Job Passport.':'Sign in to see your jobs and Job Passports.';
+ $('nameField').hidden=!signUpMode; $('companyField').hidden=!signUpMode; $('roleField').hidden=!signUpMode;
+ $('authSubmit').textContent=signUpMode?'Create account':'Sign in';
+ $('toggleAuth').textContent=signUpMode?'I already have an account':'Create an account';
+ $('password').autocomplete=signUpMode?'new-password':'current-password';
+ showMessage('authMessage','');
+});
+$('forgotPassword').addEventListener('click',async()=>{
+ const email=$('email').value.trim(); if(!email){showMessage('authMessage','Enter your email address first.','error');return;}
+ const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.href.split('?')[0]});
+ showMessage('authMessage',error?friendlyError(error):'If this email belongs to an account, a password reset link has been sent.','info');
+});
+$('authForm').addEventListener('submit',async(e)=>{
+ e.preventDefault(); const email=$('email').value.trim().toLowerCase(),password=$('password').value;
+ $('authSubmit').disabled=true; showMessage('authMessage','');
+ try {
+  if(signUpMode){
+   const full_name=$('fullName').value.trim(), company_name=$('companyName').value.trim(), role=$('role').value;
+   if(!full_name){showMessage('authMessage','Please enter your name.','error');return;}
+   const {data,error}=await supabase.auth.signUp({email,password,options:{data:{full_name,company_name,role},emailRedirectTo:location.href.split('?')[0]}});
+   if(error) throw error;
+   if(data.session){currentUser=data.user;await showApp();}
+   else showMessage('authMessage','Account created. Check your email to confirm your address, then return here to sign in.','ok');
+  } else {
+   const {data,error}=await supabase.auth.signInWithPassword({email,password}); if(error) throw error;
+   currentUser=data.user; await showApp();
+  }
+ } catch(err){showMessage('authMessage',friendlyError(err),'error');}
+ finally{$('authSubmit').disabled=false;}
+});
+$('signOut').addEventListener('click',async()=>{await supabase.auth.signOut();currentUser=null;currentJob=null;$('appView').classList.add('hidden');$('authView').classList.remove('hidden');});
+supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user){currentUser=session.user;setTimeout(()=>showApp(),0);}else{currentUser=null;$('appView').classList.add('hidden');$('authView').classList.remove('hidden');}});
+async function showApp(){
+ if(!currentUser){const {data}=await supabase.auth.getSession();currentUser=data.session?.user||null;} if(!currentUser)return;
+ $('authView').classList.add('hidden');$('appView').classList.remove('hidden');
+ const {data:profile}=await supabase.from('profiles').select('full_name,role,company_name').eq('id',currentUser.id).maybeSingle();
+ $('welcomeTitle').textContent='Your Job Passports';$('userLabel').textContent=(profile?.full_name||currentUser.email)+' · '+(profile?.role||'account');
+ await loadJobs();
+ const inviteToken=new URLSearchParams(location.search).get('invite');
+ if(inviteToken && !sessionStorage.getItem('wp_invite_'+inviteToken)){
+  sessionStorage.setItem('wp_invite_'+inviteToken,'attempted');
+  const {data,error}=await supabase.rpc('accept_job_invitation',{p_token:inviteToken});
+  if(error)showMessage('globalMessage',friendlyError(error),'error');
+  else {showMessage('globalMessage','Invitation accepted. The Job Passport is now available in your workspace.','ok');history.replaceState({},'',location.pathname);await loadJobs();openJob(data);}
+ }
+}
+async function loadJobs(){
+ const {data,error}=await supabase.from('jobs').select('id,job_number,title,customer_name,customer_email,status,scope,quote_amount,currency,start_date,due_date,created_at,owner_id').order('created_at',{ascending:false});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ jobs=data||[];
+ $('statTotal').textContent=jobs.length;
+ $('statActive').textContent=jobs.filter(j=>!['completed','cancelled'].includes(j.status)).length;
+ const ids=jobs.map(j=>j.id);let concernCount=0;
+ if(ids.length){const {data:concerns}=await supabase.from('job_concerns').select('id,status').in('job_id',ids);concernCount=(concerns||[]).filter(c=>c.status!=='resolved').length;}
+ $('statConcerns').textContent=concernCount;
+ $('jobList').innerHTML=jobs.length?jobs.map(j=>'<button class="job" type="button" data-job="'+j.id+'" style="text-align:left;width:100%"><span><span class="jobtitle">'+escapeHtml(j.title)+'</span><br><span class="small muted">'+escapeHtml(j.customer_name)+' · '+fmtDate(j.created_at)+'</span></span><span>'+statusBadge(j.status)+'</span></button>').join(''):'<div class="empty">No jobs yet. Create your first Job Passport or open an invitation link.</div>';
+ $('jobList').querySelectorAll('[data-job]').forEach(btn=>btn.addEventListener('click',()=>openJob(btn.dataset.job)));
+}
+async function openJob(id){
+ const job=jobs.find(j=>j.id===id); if(!job){showMessage('globalMessage','That job is no longer available. Refresh the list.','error');return;}
+ currentJob=job;
+ const detail=$('jobDetail');detail.innerHTML='<div class="muted">Loading Job Passport…</div>';
+ const [updatesRes,eventsRes,approvalsRes,changesRes,concernsRes,participantsRes]=await Promise.all([
+  supabase.from('job_updates').select('id,author_id,update_type,body,created_at').eq('job_id',id).order('created_at',{ascending:true}),
+  supabase.from('job_activity_events').select('id,actor_id,action,details,created_at').eq('job_id',id).order('created_at',{ascending:true}),
+  supabase.from('job_approvals').select('id,approver_email,approval_type,status,summary,decision_note,created_at').eq('job_id',id).order('created_at',{ascending:false}),
+  supabase.from('job_change_requests').select('id,requested_by,description,amount_delta,days_delta,status,created_at').eq('job_id',id).order('created_at',{ascending:false}),
+  supabase.from('job_concerns').select('id,reporter_id,subject,description,status,created_at').eq('job_id',id).order('created_at',{ascending:false}),
+  supabase.from('job_participants').select('id,user_id,participant_role,joined_at').eq('job_id',id)
+ ]);
+ const updates=updatesRes.data||[],events=eventsRes.data||[],approvals=approvalsRes.data||[],changes=changesRes.data||[],concerns=concernsRes.data||[];
+ const timeline=[...updates.map(u=>({at:u.created_at,kind:'update',title:u.update_type.replaceAll('_',' '),body:u.body,by:u.author_id===currentUser.id?'You':'Job participant'})),...events.map(ev=>({at:ev.created_at,kind:'event',title:ev.action.replaceAll('_',' '),body:JSON.stringify(ev.details||{}),by:ev.actor_id===currentUser.id?'You':'Participant'}))].sort((a,b)=>new Date(a.at)-new Date(b.at));
+ const isOwner=job.owner_id===currentUser.id;
+ detail.innerHTML='<div class="between"><div><div class="small muted">JOB #'+escapeHtml(job.job_number)+'</div><h2 style="font-size:22px;margin:3px 0">'+escapeHtml(job.title)+'</h2></div>'+statusBadge(job.status)+'</div>'+
+ '<p class="muted small">Customer: '+escapeHtml(job.customer_name)+(job.customer_email?' · '+escapeHtml(job.customer_email):'')+'</p>'+
+ '<div style="padding:12px;background:#f4f8f6;border-radius:10px;white-space:pre-wrap">'+escapeHtml(job.scope)+'</div>'+
+ '<p><strong>Quote:</strong> '+(job.quote_amount===null?'Not specified':escapeHtml(job.currency||'ZAR')+' '+Number(job.quote_amount).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+'</p>'+
+ '<p class="small muted">Planned start: '+fmtDate(job.start_date)+' · Target completion: '+fmtDate(job.due_date)+'</p>'+
+ '<hr class="rule"><h2>Timeline</h2>'+
+ (timeline.length?'<div class="timeline">'+timeline.map(t=>'<div class="event"><strong>'+escapeHtml(t.title)+'</strong><p>'+escapeHtml(t.body)+'</p><time>'+fmtDateTime(t.at)+' · '+escapeHtml(t.by)+'</time></div>').join('')+'</div>':'<div class="empty">No progress notes yet. The job creation is recorded in the job record.</div>')+
+ '<hr class="rule"><h2>Quote approvals</h2>'+
+ (approvals.length?approvals.map(a=>'<div style="border:1px solid var(--line);padding:12px;border-radius:10px;margin:8px 0"><div class="between"><strong>'+escapeHtml(a.approval_type.replaceAll('_',' '))+'</strong>'+statusBadge(a.status)+'</div><p>'+escapeHtml(a.summary)+'</p><p class="small muted">Approver: '+escapeHtml(a.approver_email)+'</p>'+(a.status==='pending'&&a.approver_email.toLowerCase()===currentUser.email.toLowerCase()?'<div class="row"><button class="btn" data-approval="'+a.id+'" data-decision="approved">Approve</button><button class="btn secondary" data-approval="'+a.id+'" data-decision="declined">Decline</button><button class="btn secondary" data-approval="'+a.id+'" data-decision="question">Ask a question</button></div>':'')+(a.decision_note?'<p class="small muted">Response: '+escapeHtml(a.decision_note)+'</p>':'')+'</div>').join(''):'<p class="muted small">No approval requests yet.</p>')+
+ (isOwner?'<div class="field"><label for="approvalEmail">Request quote approval from email</label><input id="approvalEmail" type="email" maxlength="254" placeholder="customer@example.com"></div><div class="field"><label for="approvalSummary">What is being approved?</label><textarea id="approvalSummary" maxlength="3000" placeholder="Scope and quote details for the customer to review"></textarea></div><button class="btn secondary" id="sendApproval">Request approval</button>':'')+
+ '<hr class="rule"><h2>Change requests</h2>'+
+ (changes.length?changes.map(c=>'<div style="border:1px solid var(--line);padding:11px;border-radius:10px;margin:8px 0"><div class="between"><strong>'+escapeHtml(c.description)+'</strong>'+statusBadge(c.status)+'</div><p class="small muted">Price change: '+Number(c.amount_delta).toLocaleString()+' · Schedule change: '+Number(c.days_delta)+' day(s)</p></div>').join(''):'<p class="muted small">No change requests yet.</p>')+
+ '<form id="changeForm"><div class="field"><label for="changeDescription">Propose or request a change</label><textarea id="changeDescription" required maxlength="3000" placeholder="Describe the change clearly"></textarea></div><div class="formgrid"><div class="field"><label for="changeAmount">Price difference (ZAR)</label><input id="changeAmount" type="number" step=".01" min="-100000000" max="100000000" value="0"></div><div class="field"><label for="changeDays">Schedule difference (days)</label><input id="changeDays" type="number" min="-365" max="365" value="0"></div></div><button class="btn secondary" type="submit">Save change request</button></form>'+
+ '<hr class="rule"><h2>Concerns</h2>'+
+ (concerns.length?concerns.map(c=>'<div style="border:1px solid var(--line);padding:11px;border-radius:10px;margin:8px 0"><div class="between"><strong>'+escapeHtml(c.subject)+'</strong>'+statusBadge(c.status)+'</div><p>'+escapeHtml(c.description)+'</p><p class="small muted">'+fmtDateTime(c.created_at)+'</p></div>').join(''):'<p class="muted small">No concerns recorded.</p>')+
+ '<form id="concernForm"><div class="field"><label for="concernSubject">Concern title</label><input id="concernSubject" required maxlength="160" placeholder="What needs attention?"></div><div class="field"><label for="concernDescription">Explain the concern</label><textarea id="concernDescription" required maxlength="5000"></textarea></div><button class="btn secondary" type="submit">Record concern</button></form>'+
+ '<hr class="rule"><h2>Invite participant</h2><p class="small muted">Only the job owner can invite someone. Invite links expire after seven days and are single-use. Share privately.</p>'+
+ (isOwner?'<form id="inviteForm"><div class="field"><label for="inviteEmail">Participant email</label><input id="inviteEmail" type="email" required maxlength="254" placeholder="person@example.com"></div><div class="field"><label for="inviteRole">Role on this job</label><select id="inviteRole"><option value="customer">Customer</option><option value="worker">Worker</option></select></div><button class="btn secondary" type="submit">Create secure invitation</button></form><div id="inviteResult"></div>':'<p class="small muted">You are viewing this job as an invited participant.</p>')+
+ '<hr class="rule"><form id="updateForm"><div class="field"><label for="updateType">Add to the Job Passport</label><select id="updateType"><option value="progress">Progress update</option><option value="note">Note</option><option value="delay">Delay</option><option value="issue">Issue</option><option value="completion">Completion update</option></select></div><div class="field"><label for="updateBody">What should be recorded?</label><textarea id="updateBody" required maxlength="5000" placeholder="Keep it factual and clear. New notes are added to the timeline."></textarea></div><button class="btn" type="submit">Add timeline entry</button></form>';
+ detail.querySelector('#updateForm').addEventListener('submit',submitUpdate);
+ detail.querySelector('#concernForm').addEventListener('submit',submitConcern);
+ detail.querySelector('#changeForm').addEventListener('submit',submitChange);
+ detail.querySelectorAll('[data-approval]').forEach(b=>b.addEventListener('click',()=>respondApproval(b.dataset.approval,b.dataset.decision)));
+ if(isOwner){
+  detail.querySelector('#inviteForm').addEventListener('submit',createInvite);
+  detail.querySelector('#sendApproval').addEventListener('click',sendApproval);
+ }
+}
+async function submitUpdate(e){
+ e.preventDefault();const body=$('updateBody').value.trim(),update_type=$('updateType').value;if(!currentJob||!body)return;
+ const {error}=await supabase.from('job_updates').insert({job_id:currentJob.id,author_id:currentUser.id,update_type,body});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ $('updateBody').value='';showMessage('globalMessage','Timeline entry saved.','ok');await loadJobs();await openJob(currentJob.id);
+}
+async function submitConcern(e){
+ e.preventDefault();if(!currentJob)return;
+ const subject=$('concernSubject').value.trim(),description=$('concernDescription').value.trim();
+ const {error}=await supabase.from('job_concerns').insert({job_id:currentJob.id,reporter_id:currentUser.id,subject,description});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ showMessage('globalMessage','Concern recorded for this job.','ok');await loadJobs();await openJob(currentJob.id);
+}
+async function submitChange(e){
+ e.preventDefault();if(!currentJob)return;
+ const description=$('changeDescription').value.trim(),amount_delta=Number($('changeAmount').value||0),days_delta=Number($('changeDays').value||0);
+ const {error}=await supabase.from('job_change_requests').insert({job_id:currentJob.id,requested_by:currentUser.id,description,amount_delta,days_delta});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ showMessage('globalMessage','Change request saved. It is not an approved change until the required people explicitly agree.','ok');await loadJobs();await openJob(currentJob.id);
+}
+async function createInvite(e){
+ e.preventDefault();if(!currentJob)return;
+ const p_email=$('inviteEmail').value.trim().toLowerCase(),p_role=$('inviteRole').value;
+ const {data,error}=await supabase.rpc('create_job_invitation',{p_job_id:currentJob.id,p_email,p_role});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ const link=new URL(location.href);link.search='';link.searchParams.set('invite',data);
+ $('inviteResult').innerHTML='<div class="status ok"><strong>Invitation created.</strong><p class="small">Copy this link and send it privately to '+escapeHtml(p_email)+'. It can be used once and expires in seven days.</p><input id="inviteLink" readonly style="width:100%;padding:9px;border:1px solid var(--line);border-radius:8px" value="'+escapeHtml(link.toString())+'"><button id="copyInvite" class="btn secondary" type="button" style="margin-top:8px">Copy invitation link</button></div>';
+ $('copyInvite').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(link.toString());$('copyInvite').textContent='Copied';}catch{$('inviteLink').select();document.execCommand('copy');$('copyInvite').textContent='Copied';}});
+ $('inviteEmail').value='';
+}
+async function sendApproval(){
+ if(!currentJob)return;const approver_email=$('approvalEmail').value.trim().toLowerCase(),summary=$('approvalSummary').value.trim();
+ if(!approver_email||summary.length<5){showMessage('globalMessage','Enter the approver email and a clear summary.','error');return;}
+ const {error}=await supabase.from('job_approvals').insert({job_id:currentJob.id,requested_by:currentUser.id,approver_email,approval_type:'quote',summary});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ const {error:jobError}=await supabase.from('jobs').update({status:'awaiting_approval'}).eq('id',currentJob.id);
+ if(jobError){showMessage('globalMessage','Approval created but job status could not be updated: '+friendlyError(jobError),'error');}
+ else showMessage('globalMessage','Quote approval request saved. Invite the approver to this Job Passport so they can review it.','ok');
+ await loadJobs();await openJob(currentJob.id);
+}
+async function respondApproval(id,decision){
+ const note=decision==='question'?prompt('What would you like clarified?'):(decision==='declined'?prompt('Optional reason for declining:'):'');
+ if(decision==='question' && note===null)return;
+ const {error}=await supabase.rpc('respond_to_job_approval',{p_approval_id:id,p_decision:decision,p_note:note||null});
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ showMessage('globalMessage','Your response was recorded.','ok');await loadJobs();await openJob(currentJob.id);
+}
+$('createJobForm').addEventListener('submit',async(e)=>{
+ e.preventDefault();if(!currentUser)return;
+ const title=$('jobTitle').value.trim(),customer_name=$('customerName').value.trim(),customer_email=$('customerEmail').value.trim().toLowerCase()||null,scope=$('scope').value.trim();
+ const amount=$('quoteAmount').value,quote_amount=amount===''?null:Number(amount),start_date=$('startDate').value||null,due_date=$('dueDate').value||null;
+ if(start_date&&due_date&&due_date<start_date){showMessage('globalMessage','Target completion cannot be before the planned start date.','error');return;}
+ const {data:job,error}=await supabase.from('jobs').insert({owner_id:currentUser.id,title,customer_name,customer_email,scope,quote_amount,currency:'ZAR',start_date,due_date,status:'draft'}).select('id').single();
+ if(error){showMessage('globalMessage',friendlyError(error),'error');return;}
+ const note=$('firstNote').value.trim()||'Job Passport created. Proposed scope and details are recorded above.';
+ const {error:updateError}=await supabase.from('job_updates').insert({job_id:job.id,author_id:currentUser.id,update_type:'note',body:note});
+ if(updateError)showMessage('globalMessage','Job created, but the initial note could not be saved: '+friendlyError(updateError),'error');
+ else showMessage('globalMessage','Job Passport created and saved. Invite the customer when you are ready.','ok');
+ $('createJobForm').reset();await loadJobs();setTab('jobsTab');await openJob(job.id);
+});
+(async()=>{
+ const {data:{session}}=await supabase.auth.getSession();
+ if(session?.user){currentUser=session.user;await showApp();}
+ else if(new URLSearchParams(location.search).has('invite')) showMessage('authMessage','Sign in or create an account using the invited email address, then this page will redeem the invitation.','info');
+})();
+</script>
+</body>
+</html>
