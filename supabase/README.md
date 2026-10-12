@@ -14,7 +14,7 @@ The following migrations are recorded in the connected Supabase project's migrat
 - `20261012074306_workproof_admin_audit_and_concern_review`
 - `20261012074454_enforce_workproof_account_suspensions`
 - `20261012074557_workproof_admin_guard_and_indexes`
-- `2026101207xxxx_tighten_invitation_guard_and_admin_indexes` (latest migration version is visible in Supabase migration history)
+- `20261012074643_tighten_invitation_guard_and_admin_indexes` (latest migration version is visible in Supabase migration history)
 
 The live schema was applied through the authenticated Supabase integration. The SQL for these operations has not yet been consolidated into clean, local CLI-generated migration files, so **do not use this repository as a second-environment migration source yet**. Before staging/production environments are added, pull the live schema into formal migrations, review them, and test applying them to a fresh development branch.
 
