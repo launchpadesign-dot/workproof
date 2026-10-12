@@ -33,6 +33,12 @@ Deno.serve(async (req: Request) => {
   if (userError || !userData.user) return response(401, { error: "Your session is invalid. Sign in again." });
   const actor = userData.user;
 
+  const { data: accountStatus, error: statusError } = await adminClient
+    .from("workproof_account_status").select("status").eq("user_id", actor.id).maybeSingle();
+  if (statusError || accountStatus?.status === "suspended") {
+    return response(403, { error: "This account is suspended or its status could not be verified." });
+  }
+
   const { data: adminRecord, error: adminError } = await adminClient
     .from("platform_admins").select("user_id").eq("user_id", actor.id).maybeSingle();
   if (adminError || !adminRecord) return response(403, { error: "Platform administrator access required." });
@@ -42,6 +48,16 @@ Deno.serve(async (req: Request) => {
   catch { return response(400, { error: "Send a valid JSON request." }); }
 
   const action = String(body.action || "");
+  if (action === "list_audit") {
+    const { data, error } = await adminClient
+      .from("admin_audit_log")
+      .select("id,actor_id,action,target_user_id,target_concern_id,reason,details,created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) return response(500, { error: "Could not load the audit log." });
+    return response(200, { entries: data || [] });
+  }
+
   if (action === "list_users") {
     const users: Array<Record<string, unknown>> = [];
     for (let page = 1; page <= 20; page++) {
@@ -80,11 +96,32 @@ Deno.serve(async (req: Request) => {
     if (targetAdminError) return response(500, { error: "Could not verify the target account." });
     if (targetAdmin) return response(400, { error: "Administrator accounts cannot be suspended from this screen. Use a separate owner-reviewed process." });
 
+    if (action === "suspend_user") {
+      const { error: statusWriteError } = await adminClient.from("workproof_account_status").upsert({
+        user_id: targetId, status: "suspended", reason, changed_by: actor.id, changed_at: new Date().toISOString(),
+      });
+      if (statusWriteError) return response(500, { error: "Could not apply the database access lock. No Auth ban was attempted." });
+    }
+
     const { data: updated, error: updateError } = await adminClient.auth.admin.updateUserById(
       targetId,
       { ban_duration: action === "suspend_user" ? "87600h" : "none" },
     );
-    if (updateError || !updated.user) return response(400, { error: updateError?.message || "Account update failed." });
+    if (updateError || !updated.user) {
+      if (action === "suspend_user") {
+        await adminClient.from("workproof_account_status").upsert({
+          user_id: targetId, status: "active", reason: "Suspension rolled back after Auth ban failure.", changed_by: actor.id, changed_at: new Date().toISOString(),
+        });
+      }
+      return response(400, { error: updateError?.message || "Account update failed." });
+    }
+
+    if (action === "restore_user") {
+      const { error: statusWriteError } = await adminClient.from("workproof_account_status").upsert({
+        user_id: targetId, status: "active", reason, changed_by: actor.id, changed_at: new Date().toISOString(),
+      });
+      if (statusWriteError) return response(500, { error: "Auth access was restored, but the database lock remains. Retry the restore action or contact support." });
+    }
 
     const { error: auditError } = await adminClient.from("admin_audit_log").insert({
       actor_id: actor.id,
